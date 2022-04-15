@@ -16,8 +16,8 @@ import com.dardan.springboot.app.productos.models.service.IProductoService;
 @RestController
 public class ProductoController {
 
-	//@Autowired
-	//private Environment env;
+	@Autowired
+	private Environment env;
 
 	@Value("${server.port}")
 	private Integer port;
@@ -28,8 +28,8 @@ public class ProductoController {
 	@GetMapping("/listar")
 	public List<Producto> listar(){
 		return productoService.findAll().stream().map(producto ->{
-			//producto.setPort(Integer.parseInt(env.getProperty("local.server.port")));
-			producto.setPort(port);
+			producto.setPort(Integer.parseInt(env.getProperty("local.server.port")));
+			//producto.setPort(port);
 			return producto;
 		}).collect(Collectors.toList());
 	}
