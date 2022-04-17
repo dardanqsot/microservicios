@@ -27,7 +27,6 @@ public class EjemploGatewayFilterFactory extends AbstractGatewayFilterFactory<Ej
 	@Override
 	public GatewayFilter apply(Configuracion config) {
 		return (exchange, chain) -> {
-	
 			logger.info("ejecutando pre gateway filter factory: " + config.mensaje);
 			return chain.filter(exchange).then(Mono.fromRunnable(() -> {
 				
@@ -39,6 +38,17 @@ public class EjemploGatewayFilterFactory extends AbstractGatewayFilterFactory<Ej
 				
 			}));
 		};
+	}
+
+
+	@Override
+	public String name() { // Para cambiar el nombre que se usar en el yml en lugar de tomar x defecto el nombre de la clase
+		return "EjemploCookie";
+	}
+
+	@Override
+	public List<String> shortcutFieldOrder() { // para indicar el orden de los parametros que tendran en el .yml
+		return Arrays.asList("mensaje", "cookieNombre", "cookieValor");
 	}
 
 	public static class Configuracion {
