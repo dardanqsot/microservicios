@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.dardan.springboot.app.item.models.Producto;
 //import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
@@ -15,6 +17,7 @@ import com.dardan.springboot.app.item.models.service.ItemService;
 @RestController
 public class ItemController {
 
+	private final Logger logger = LoggerFactory.getLogger(ItemController.class);
 	@Autowired
 	private CircuitBreakerFactory cbFractory;
 
@@ -32,10 +35,12 @@ public class ItemController {
 	@GetMapping("/ver/{id}/cantidad/{cantidad}")
 	public Item detalle(@PathVariable Long id, @PathVariable Integer cantidad) {
 		return cbFractory.create("items")
-				.run(() -> itemService.findById(id, cantidad), e -> metodoAlternativo(id, cantidad));
+				.run(() -> itemService.findById(id, cantidad), e -> metodoAlternativo(id, cantidad, e));
 	}
 
-	public Item metodoAlternativo(Long id, Integer cantidad) {
+	public Item metodoAlternativo(Long id, Integer cantidad, Throwable e) {
+		logger.info(e.getMessage());
+
 		Item item = new Item();
 		Producto producto = new Producto();
 
