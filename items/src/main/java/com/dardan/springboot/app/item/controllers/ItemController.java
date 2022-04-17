@@ -3,9 +3,10 @@ package com.dardan.springboot.app.item.controllers;
 import java.util.List;
 
 import com.dardan.springboot.app.item.models.Producto;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+//import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import com.dardan.springboot.app.item.models.Item;
@@ -13,8 +14,10 @@ import com.dardan.springboot.app.item.models.service.ItemService;
 
 @RestController
 public class ItemController {
-	
+
 	@Autowired
+	private CircuitBreakerFactory cbFractory;
+
 	@Qualifier("serviceFeign")
 	private ItemService itemService;
 	
@@ -25,10 +28,11 @@ public class ItemController {
 		return itemService.findAll();
 	}
 
-	@HystrixCommand(fallbackMethod="metodoAlternativo")
+	//@HystrixCommand(fallbackMethod="metodoAlternativo")
 	@GetMapping("/ver/{id}/cantidad/{cantidad}")
 	public Item detalle(@PathVariable Long id, @PathVariable Integer cantidad) {
-		return itemService.findById(id, cantidad);
+		return cbFractory.create("items")
+				.run(() -> itemService.findById(id, cantidad), e -> metodoAlternativo(id, cantidad));
 	}
 
 	public Item metodoAlternativo(Long id, Integer cantidad) {
