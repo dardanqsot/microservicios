@@ -34,7 +34,7 @@ public class ItemController {
 	//@HystrixCommand(fallbackMethod="metodoAlternativo")
 	@GetMapping("/ver/{id}/cantidad/{cantidad}")
 	public Item detalle(@PathVariable Long id, @PathVariable Integer cantidad) {
-		return cbFractory.create("items")
+		return cbFractory.create("items") //nombre del cortocircuito que vamos a crear
 				.run(() -> itemService.findById(id, cantidad), e -> metodoAlternativo(id, cantidad, e));
 	}
 

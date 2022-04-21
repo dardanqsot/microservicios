@@ -20,16 +20,4 @@ public class AppConfig {
 		return new RestTemplate();
 	}
 
-	@Bean
-	public Customizer<Resilience4JCircuitBreakerFactory> defaultCustomizer(){
-		return factory -> factory.configureDefault(id -> {
-			return new Resilience4JConfigBuilder(id)
-					.circuitBreakerConfig()(CircuitBreakerConfig.custom()
-					.slidingWindowSize(10)
-					.failureRateThreshold(50)
-					.waitDurationInOpenState(Duration.ofSeconds(10L))
-					.build())
-
-		});
-	}
 }
