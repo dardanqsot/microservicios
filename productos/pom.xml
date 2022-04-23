@@ -8,7 +8,7 @@
         <version>2.5.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.formacionbdi.springboot.app.productos</groupId>
+    <groupId>com.dardan.springboot.app.productos</groupId>
     <artifactId>springboot-servicio-productos</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>springboot-servicio-productos</name>

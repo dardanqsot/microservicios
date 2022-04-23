@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
-//import org.springframework.http.MediaType;
+// import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -26,19 +26,20 @@ public class EjemploGlobalFilter implements GlobalFilter, Ordered{
 		
 		return chain.filter(exchange).then(Mono.fromRunnable(() -> {
 			logger.info("ejecutando filtro post");
-
+			
 			Optional.ofNullable(exchange.getRequest().getHeaders().getFirst("token")).ifPresent(valor -> {
 				exchange.getResponse().getHeaders().add("token", valor);
 			});
-
+			
 			exchange.getResponse().getCookies().add("color", ResponseCookie.from("color", "rojo").build());
-			//exchange.getResponse().getHeaders().setContentType(MediaType.TEXT_PLAIN);
+			// exchange.getResponse().getHeaders().setContentType(MediaType.TEXT_PLAIN);
 		}));
 	}
 
 	@Override
 	public int getOrder() {
-		return 1;  //si fuese negativo seria solo de lectura
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }
